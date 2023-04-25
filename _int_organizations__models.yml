@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: int_organization__rankedhighest
+    description: >
+      Intermediate model to bring the highest ranking organization's information
+      which is linked to the Author's in the mart layer.
+      One record per organization.
+    columns:
+      - name: organization_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+            
+      - name: org_name
+        description: "Organization's name"
+
+      - name: parent_org_name
+        description: "Organization's top parent name"
+
+      - name: organization_countryisocode3
+        description: "Country's ISO Code of the organization"
+        tests:
+          - relationships:
+              to: ref('stg_frontiers_dwh__countries_regions')
+              field: countries_regions_countryid
+
+      - name: country
+        description: "Organization top parent's country"
+
+      - name: continent
+        description: "Organization's top parent continent"
+
+      - name: regionsbin4
+        description: "Organization's top parent grouped by Frontiers 4 Regons bins"
+
+      - name: regionsbin7
+        description: "Organization's top parent grouped by Frontiers 7 Regons bins"
+
+      - name: regionsbin8
+        description: "Organization's top parent grouped by Frontiers 8 Regons bins"
+
+      - name: rejectionratebin
+        description: "Organization's top parent grouped by Frontiers Focus Regons bins"
+
+      - name: org_rank
+        description: "Organization's top parent rank based on their position"
+
+      - name: highest_ranked
+        description: "Organization's top parentof highest' rank based on their ranking id"

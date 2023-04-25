@@ -2,7 +2,7 @@
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 'my_new_project'
+name: 'world_monitor'
 version: '1.0.0'
 config-version: 2
 
@@ -32,7 +32,55 @@ clean-targets:         # directories to be removed by `dbt clean`
 # as tables. These settings can be overridden in the individual model files
 # using the `{{ config(...) }}` macro.
 models:
-  my_new_project:
-    # Applies to all files under models/example/
-    example:
-      materialized: view
+  dbt_project_evaluator:
+    +enabled: "{{ env_var('DBT_ENABLE_DBT_PROJECT_EVALUATOR', 'true') }}"
+
+  world_monitor:
+    # Applies to all files under models/
+    # All models should have unique and not null
+    +required_tests: {"unique.*|not_null": 2}
+    +persist_docs:
+       relation: true
+       columns: true
+    +database: "{% if target.name == 'pro' %}frontiers-ocean-exports{% else %}{{ target.database }}{% endif %}"
+    staging:
+      +schema: staging
+      +materialized: view
+    intermediate:
+      +schema: intermediate
+      +materialized: view
+    marts:
+      +schema: marts
+      +materialized: table
+  # Control the behaviour of the project evaluator package in Dev and CI
+  dbt_project_evaluator:
+    +severity: "{{ env_var('DBT_PROJECT_EVALUATOR_SEVERITY', 'warn') }}"
+    +enabled: "{{ env_var('DBT_ENABLE_DBT_PROJECT_EVALUATOR', 'true') == 'true' | as_bool }}"
+    +schema: project_evaluator
+    marts:
+      tests:
+        +enabled: false
+      structure:
+        fct_test_directories:
+          +enabled: false
+    
+tests:
+  world_monitor:
+    # Applies to all files under models/
+    +database: "{% if target.name == 'pro' %}frontiers-ocean-exports{% else %}{{ target.database }}{% endif %}"
+    +severity: warn
+    # Limit the number of failures to return by a test query to 100
+    +limit: 100
+    # Enabe to store test failures in a specific schema for possible investigation
+    +store_failures: true
+    # Add specific schema to store failures
+    +schema: test_audit
+
+    
+snapshots:
+  world_monitor:
+    # Configure the snapshots
+    +target_database: frontiers-ocean
+    +target_schema: dataset_world_monitor_snapshots 
+    
+      

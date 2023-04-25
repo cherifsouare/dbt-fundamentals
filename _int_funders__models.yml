@@ -1,0 +1,41 @@
+
+version: 2
+
+models:
+  - name: int_publications_funders__joigned
+    description: >
+      Intermediate model to bring together articles funding intormation 
+      from the dimensions in the final table in the mart layer.
+    columns:
+      - name: surrogate_key
+        description: >
+          Primary key for the table.
+          An article is associated to one or more grants.
+          Each record correspond to a unique combinaison 
+          of article doi,grant and the corresponding organization.
+        tests:
+          - unique
+          - not_null
+            
+      - name: dimensions_publication_doi
+        description: "Article's Digital Object Identifier from Dimensions"
+
+      - name: publications_grantid
+        description: "Unnested field from publications to link with grant data from Dimensions."
+
+      - name: start_date
+        description: "Start date of the grant"
+
+      - name: end_date
+        description: "End date for the grant if applicable"
+
+      - name: original_funding_currency
+        description: "Initial currency of the grant"
+
+      - name: organizationsource_organizationid
+        description: >
+          This field is extracted by linking the grants to the organization source entity using the 
+          funder's name (grid_id).
+
+      - name: funding_amount_usd
+        description: "Funding amount in US Dollar"

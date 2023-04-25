@@ -1,0 +1,237 @@
+version: 2
+
+models:
+  - name: fct_world_monitor
+    description: >
+      Final output from the data transformation process in dbt for 
+      the World Monitor Dashboard           
+    columns:
+      - name: surrogate_key
+        description: >
+          An article is associated to one or more authors.
+          Each record correspond to a unique combinaison of article and author information.
+        tests:
+          - unique:
+              config:
+                where: "publication_id is not null"
+          - not_null:
+              config:
+                where: "publication_id is not null"
+      
+      - name: publication_id
+        description: "Unique identifier for publications in AIRA"
+
+      - name: publication_doi
+        description: "Digital Object Identifier of the article in AIRA"
+
+      - name: published_year
+        description: "Year of the publication, or of the start of the Grant"
+
+      - name: published_date
+        description: ""
+
+      - name: publication_type
+        description: "Type of the Article"
+
+      - name: journal_id
+        description: "Id of the journal"
+
+      - name: journal_name
+        description: "Journal of the Article"
+
+      - name: journal_impact_factor
+        description: "Latest Impact factor reported in JCR (based on the most recent year) provided by WoS "
+
+      - name: jif_percentile_bin
+        description: "Article's Journal Impact Factor (JIF) Percentile grouped by bins, provIded by WoS"
+
+      - name: is_openaccess
+        description: "Is the Article's Publisher an Open Access publisher?"
+
+      - name: open_access_category
+        description: "{{ doc('open_access_category') }}"
+
+      - name: publisher_name
+        description: "Publisher of the article"
+
+      - name: cites
+        description: ""
+
+      - name: author_id
+        description: "Author's Aira Id"
+
+      - name: full_name
+        description: "Author's Full name"
+
+      - name: primary_email_address
+        description: "Author's primary email address"
+
+      - name: is_ebmauthor
+        description: "Author has currently an active role at the Frontiers Editorial Board"
+
+      - name: has_authorbeencontacted_viacampaign
+        description: "Any of the Author's email addresses has been contacted via SalesForce campaigns?"
+
+      - name: is_frontiers_author
+        description: "Authors with at least 1 publication with Frontiers"
+
+      - name: is_mdpi_author
+        description: "Authors with at least 1 publication with MDPI"
+
+      - name: is_elsevier_author
+        description: "Authors with at least 1 publication with Elsevier"
+
+      - name: is_springernature_author
+        description: "Authors with at least 1 publication with Springer Nature"
+
+      - name: is_wiley_author
+        description: "Authors with at least 1 publication with Wiley"
+
+      - name: is_ieee_author
+        description: "Authors with at least 1 publication with IEEE"
+
+      - name: is_taylorandfrancis_author
+        description: "Authors with at least 1 publication with Taylor&Francis"
+
+      - name: articles_published_bins
+        description: "Author's published articles all years bins"
+
+      - name: frontiers_closest_journal
+        description: "Authors closest Frontiers Journal name"
+
+      - name: frontiers_closest_journalconfidence
+        description: > 
+          Confidence" of the Closest Frontiers Journal for each
+          Author (it's the % of the top ranked more frequent Journal of which are
+          EBM the closest authors to the one under examination).
+
+      - name: author_field_of_study
+        description: ""
+
+      - name: author_field_of_study_l1
+        description: "Author's Highest Similar Field of Study, by middle level hierarchy L2"
+
+      - name: author_field_of_study_l2
+        description: "Author's Highest Similar Field of Study, by lowest level hierarchy L3"
+
+      - name: has_validemail
+        description: "If author's email is valid checked by AIRA validation process"
+
+      - name: user_highest_role_id
+        description: ""
+
+      - name: user_highest_role
+        description: "Highest Frontiers role of the author"
+
+      - name: hindex
+        description: "Author's H-Index"
+
+      - name: h_index_bins
+        description: "Author's H-Index grouped by Bins"
+
+      - name: influence
+        description: "Author's science radar influence score"
+
+      - name: influence_bins
+        description: "Author's science radar influence percentile grouped by Bins"
+
+      - name: connectivity
+        description: "Author's science radar connectivity score"
+
+      - name: connectivity_bins
+        description: "Author's science radar connectivity percentile grouped by Bins"
+
+      - name: activeness
+        description: "Author's science radar activity score"
+
+      - name: activity_bins
+        description: "Author's science radar activity percentile grouped by Bins"
+
+      - name: productivity
+        description: "Author's science radar productivity score"
+
+      - name: productivity_bins
+        description: "Author's science radar productivity percentile grouped by Bins"
+
+      - name: trendiness
+        description: "Author's science radar trendiness score"
+
+      - name: trendiness_bins
+        description: "Author's science radar trendiness percentile grouped by Bins"
+
+      - name: org_name
+        description: ""
+
+      - name: parent_org_name
+        description: "Highest Rank Parent Organization from Author's last known Affiliation"
+
+      - name: org_rank
+        description: ""
+
+      - name: org_rank_bins
+        description: ""
+
+      - name: org_top150
+        description: >
+          Author's last known affiliation Parent Organization 
+          on Top 150 Rank? "Yes" if Position<=150
+
+      - name: countryisocode3
+        description: ""
+
+      - name: country
+        description: "Country of the Author's last known affiliation - Organization top Parent"
+
+      - name: continent
+        description: "Continent of the Author's last known affiliation - (Organization top Parent)"
+
+      - name: regionsbin4
+        description: ""
+
+      - name: regionsbin8
+        description: ""
+
+      - name: focusregionsbin
+        description: ""
+
+      - name: rejectionratebin
+        description: ""
+
+      - name: grant_id
+        description: "Identifier of the grant"
+
+      - name: grant_start_date
+        description: "Start date of the grant"
+
+      - name: grant_end_date
+        description: "End date of the grant"
+
+      - name: funder_name
+        description: "Funder's organization (top parent) of the article"
+
+      - name: funder_country
+        description: "Article Funder's Organization top parent's Country"
+
+      - name: funder_regionsbins4
+        description: "Article Funder's Organization top parent's Country, grouped by Frontiers 4 Bins Regions"
+
+      - name: funder_regionsbins7
+        description: "Article Funder's Organization top parent's Country, grouped by Frontiers 7 Bins Regions"
+
+      - name: funder_regionsbins8
+        description: "Article Funder's Organization top parent's Country, grouped by Frontiers 8 Bins Regions"
+
+      - name: funder_focusregionsbin
+        description: "Article Funder's Organization top parent's Country, grouped by Frontiers Focus Region Bins"
+
+      - name: funding_amount_usd
+        description: "Total funded amount in USD by year of Grant Start"
+
+      - name: author_weight
+        description: ""
+
+      - name: weight
+        description: ""
+
+      - name: table_source
+        description: "Category of the source data used to separate articles from grants exclusively"

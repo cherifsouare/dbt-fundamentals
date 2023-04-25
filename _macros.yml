@@ -1,0 +1,14 @@
+version: 2
+
+macros:
+  - name: scienceradar_bins
+    description: '{{ doc("scienceradar_bins") }}'
+    arguments:
+      - name: column_name
+        type: integer
+  - name: authors_from_publishers
+    description: '{{ doc("authors_from_publishers") }}'
+    arguments:
+      - name: column_name
+        type: integer
+  
